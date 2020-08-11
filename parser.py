@@ -3,22 +3,20 @@ import pprint
 import requests
 from bs4 import BeautifulSoup
 
-import config as c
-
 
 def get_html(url: str, params: dict) -> str:
     try:
         r = requests.get(url, params=params)
         r.raise_for_status()
-        return r.text
+        return r
     except (requests.RequestException, ValueError) as e:
         print(repr(e))
         return False
 
 
-def parse_habr_html(html: str) -> list:
+def parse_habr_html(html: requests.models.Response) -> list:
     if html:
-        soup = BeautifulSoup(html, "lxml")
+        soup = BeautifulSoup(html.text, "lxml")
         vacancies = soup.find_all(
             name="div",
             attrs={"class": "vacancy-card__info"}
@@ -29,7 +27,7 @@ def parse_habr_html(html: str) -> list:
                 {
                     "link": f"https://career.habr.com{vacancy.a['href']}",
                     "title": vacancy.a.text,
-                    "calary": vacancy.find("div", {"class": "basic-salary"}).text,
+                    "salary": vacancy.find("div", {"class": "basic-salary"}).text,
                     "skills": [skill.text for skill in vacancy.find(
                         "div", {"class": "vacancy-card__skills"}).find_all(
                             "a", {"class": "link-comp link-comp--appearance-dark"})],
@@ -44,18 +42,27 @@ def parse_habr_html(html: str) -> list:
         return vs_list
 
 
-def parse_hh_html(html: str) -> list:
-    pass
+def parse_hh_html(html: requests.models.Response) -> list:
+    if html:
+        vacancies = html.json()["items"]
+        pprint.pprint(html.json()["alternate_url"])
+        vs_list = []
+        for vacancy in vacancies:
+            vs_list.append(
+                {
+                    "link": vacancy["alternate_url"],
+                    "title": vacancy["name"],
+                    "salary": vacancy["salary"]["from"] if vacancy["salary"] else None,
+                    "skills": vacancy["snippet"]["requirement"] if vacancy["snippet"] else None,
+                    "meta": [
+                        vacancy["employer"]["name"],
+                        vacancy["address"]["city"] if vacancy["address"] else vacancy["area"]["name"]
+                    ],
+                    "employment_type": vacancy["schedule"]["name"]
+                }
+            )
+        return vs_list
 
 
 if __name__ == "__main__":
-    # print(get_html(
-    #     url=c.HABR_BASE,
-    #     headers=c.HABR_HEADERS
-    # )
-    # )
-    html = get_html(
-        url=c.HH_BASE,
-        params=c.HH_HEADERS
-    )
-    # parse_habr_html(html=html)
+    pass

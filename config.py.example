@@ -1,0 +1,26 @@
+# Telegram part data
+BOT_TOKEN = ""
+CHANNEL_ID = ""
+ADMIN_ID = ""
+
+# User-Agent
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0)\
+             Gecko/20100101 Firefox/70.0"
+
+# hh.ru part data
+HH_BASE = "https://api.hh.ru/vacancies"
+HH_PARAMS = {
+    "period": "",
+    "employment": "",
+    "text": "",
+    "area": ""
+}
+
+# habr.career part data
+HABR_BASE = "https://career.habr.com/vacancies"
+HABR_PARAMS = {
+    "q": "",
+    "city_id": "",
+    "qid": "",
+    "employment_type": ""
+}

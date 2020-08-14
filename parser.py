@@ -45,7 +45,6 @@ def parse_habr_html(html: requests.models.Response) -> list:
 def parse_hh_html(html: requests.models.Response) -> list:
     if html:
         vacancies = html.json()["items"]
-        pprint.pprint(html.json()["alternate_url"])
         vs_list = []
         for vacancy in vacancies:
             vs_list.append(

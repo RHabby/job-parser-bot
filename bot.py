@@ -22,9 +22,13 @@ def generate_message(source: str) -> str:
 
     text = ""
     for vacancy in vacancies:
-        skills = ', '.join(vacancy['skills']) if isinstance(
-            vacancy['skills'], list) else vacancy['skills'].replace(
-                '<highlighttext>', '').replace('</highlighttext>', '')
+        # тип требуемых навыков может быть str или None
+        try:
+            skills = ', '.join(vacancy['skills']) if isinstance(
+                vacancy['skills'], list) else vacancy['skills'].replace(
+                    '<highlighttext>', '').replace('</highlighttext>', '')
+        except AttributeError:
+            skills = "Требуемые навыки не указаны"
 
         employment_type = ', '.join(vacancy['employment_type']) if isinstance(
             vacancy['employment_type'], list) else vacancy['employment_type']
@@ -41,6 +45,7 @@ def send_jobs():
     resources = ["hh", "habr"]
     for source in resources:
         text = generate_message(source=source)
+        text = text if text else "Вакансий нет."
         bot.send_message(
             chat_id=c.CHANNEL_ID,
             text=f"*Источник вакансий: {source}*\n\n{text}",
@@ -50,4 +55,4 @@ def send_jobs():
 
 
 if __name__ == "__main__":
-    pass
+    send_jobs()

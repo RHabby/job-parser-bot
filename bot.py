@@ -35,8 +35,8 @@ def generate_message(source: str) -> str:
 
         salary = vacancy['salary'] if vacancy['salary'] else "не указана"
 
-        text += f"[{vacancy['title']}]({vacancy['link']})\nЗП: {salary}\n\
-{skills}\n{', '.join(vacancy['meta'])}\n{employment_type}\n\n"
+        text += f"[{vacancy['title']}]({vacancy['link']})\nЗП: {salary}\
+            \n{skills}\n{', '.join(vacancy['meta'])}\n{employment_type}\n\n"
 
     return text
 

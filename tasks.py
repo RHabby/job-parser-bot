@@ -7,6 +7,7 @@ from pytz import timezone
 
 celery_app = Celery("jobs", broker="redis://localhost:6379")
 
+# выполняется каждый день в 8.30 утра по московскому времени
 celery_app.conf.beat_schedule = {
     "send_job": {
         "task": "send_job",

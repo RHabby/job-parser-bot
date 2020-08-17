@@ -1,5 +1,3 @@
-import pprint
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,8 +7,7 @@ def get_html(url: str, params: dict) -> str:
         r = requests.get(url, params=params)
         r.raise_for_status()
         return r
-    except (requests.RequestException, ValueError) as e:
-        print(repr(e))
+    except (requests.RequestException, ValueError):
         return False
 
 

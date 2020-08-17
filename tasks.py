@@ -5,7 +5,7 @@ from bot import send_jobs
 from pytz import timezone
 
 
-celery_app = Celery("jobs", broker="redis://localhost")
+celery_app = Celery("jobs", broker="redis://localhost:6379")
 
 celery_app.conf.beat_schedule = {
     "send_job": {
